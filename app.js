@@ -1,8 +1,21 @@
 const express = require("express");
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
+const flash = require("connect-flash");
 const app = express();
-const router = require("./router");
-// =========================
 
+let sessionOptions = session({
+  secret: "Karma Is My Love",
+  store: new MongoStore({ client: require("./db") }),
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true }
+});
+const router = require("./router");
+// ===========
+
+app.use(sessionOptions);
+app.use(flash());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));

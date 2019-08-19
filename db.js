@@ -1,13 +1,13 @@
+const dotenv = require("dotenv");
+dotenv.config();
 const mongodb = require("mongodb");
 
-const connectionString = "mongodb:localhost/KarmaDev-app";
-
 mongodb.connect(
-  connectionString,
-  { useNewUrlParser: true },
+  process.env.CONNECTIONSTRING,
+  { useNewUrlParser: true, useUnifiedTopology: true },
   function(err, client) {
-    module.exports = client.db();
+    module.exports = client;
     const app = require("./app");
-    app.listen(3000);
+    app.listen(process.env.PORT);
   }
 );
